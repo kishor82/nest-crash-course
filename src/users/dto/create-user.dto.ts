@@ -8,7 +8,11 @@ export class CreateUserDto {
   @IsAlphanumeric()
   @MaxLength(10)
   name: string;
+}
 
-  @ApiProperty({ required: false })
-  age?: number;
+export class UpdateUserDto {
+  @ApiProperty()
+  @IsAlphanumeric()
+  @MaxLength(10)
+  name: string;
 }
