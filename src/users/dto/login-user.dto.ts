@@ -3,12 +3,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsAlphanumeric, MaxLength } from 'class-validator';
 
-export class CreateUserDto {
-  @ApiProperty()
-  @IsAlphanumeric()
-  @MaxLength(10)
-  name: string;
-
+export class LoginUserDto {
   @ApiProperty()
   @IsAlphanumeric()
   @MaxLength(12)
@@ -16,11 +11,4 @@ export class CreateUserDto {
 
   @ApiProperty()
   password: string;
-}
-
-export class UpdateUserDto {
-  @ApiProperty()
-  @IsAlphanumeric()
-  @MaxLength(10)
-  name: string;
 }

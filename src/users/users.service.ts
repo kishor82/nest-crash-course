@@ -18,13 +18,19 @@ export class UsersService {
     });
   }
 
+  findOne(filter: Partial<User>): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        ...filter,
+      },
+    });
+  }
+
   findById(id: number): Promise<User> {
     return this.usersRepository.findOneBy({ id });
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
-    // const newUser = { id: Date.now(), ...createUserDto };
-
     const newUser = this.usersRepository.create(createUserDto);
 
     return this.usersRepository.save(newUser);
