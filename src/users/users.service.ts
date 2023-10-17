@@ -12,13 +12,9 @@ export class UsersService {
 
   findAll(name?: string): Promise<User[]> {
     return this.usersRepository.find({
-      ...(name
-        ? {
-            where: {
-              name,
-            },
-          }
-        : {}),
+      where: {
+        name,
+      },
     });
   }
 
