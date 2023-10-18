@@ -9,6 +9,7 @@ import {
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { LoginUserDto } from './users/dto/login-user.dto';
+import { AuthenticatedGuard } from './auth/authenticated.guard';
 
 @Controller()
 export class AppController {
@@ -23,7 +24,7 @@ export class AppController {
     };
   }
 
-  //TODO
+  @UseGuards(AuthenticatedGuard)
   @Get('protected')
   getProtected(): string {
     return this.appService.getHello('This is Protected content');
