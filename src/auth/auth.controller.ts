@@ -5,6 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
+  BadRequestException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { omit } from 'lodash';
@@ -25,6 +26,13 @@ export class AuthController {
   async addUser(@Body() userData: CreateUserDto) {
     const { password, username, name } = userData;
     const saltOrRounds = 10;
+
+    const isUserExist = await this.usersService.findOne({ username });
+
+    if (isUserExist) {
+      throw new BadRequestException('username must be unique');
+    }
+
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
     const result = await this.usersService.createUser({
       username,
