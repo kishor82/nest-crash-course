@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { omit } from 'lodash';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalAuthGuard } from './local.auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthenticatedGuard } from './authenticated.guard';
