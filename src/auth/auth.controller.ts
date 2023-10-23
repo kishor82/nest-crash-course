@@ -51,13 +51,13 @@ export class AuthController {
   @Post('login')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   login(@Request() req, @Body() _body: LoginUserDto): any {
-    return req.user;
+    return req.user; // TODO: return JWT access token
   }
 
   //Authenticated user
   @UseGuards(AuthenticatedGuard)
   @Get('me')
   getProtected(@Request() req): string {
-    return req.user;
+    return req.user; // TODO: require an Bearer token, validate token
   }
 }
