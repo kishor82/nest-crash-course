@@ -11,7 +11,7 @@ class Main {
   async bootstrap() {
     const logger = new Logger(Main.name);
     const redisStore = new RedisStore({
-      client: Redis,
+      client: new Redis(),
       prefix: 'myapp:',
     });
     const port = 3000;
@@ -21,11 +21,11 @@ class Main {
     app.use(
       session({
         store: redisStore,
-        secret: 'keyboard cat', // TODO : get it from env
+        secret: 'sup3rs3cr3t', // TODO : get it from env
         resave: false,
         saveUninitialized: false,
         cookie: {
-          maxAge: 360000,
+          maxAge: 3600000,
         },
       }),
     );
