@@ -10,10 +10,31 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
+  private excludeFields(excludeFields: (keyof User)[]) {
+    // Get the list of all column names in the User entity
+    const allColumnNames = this.usersRepository.metadata.columns.map(
+      (column) => column.propertyName,
+    ) as (keyof User)[];
+
+    // Generate a list of fields to include by excluding the specified fields
+    return allColumnNames.filter(
+      (columnName: keyof User) => !excludeFields.includes(columnName),
+    );
+  }
+
   findAll(name?: string): Promise<User[]> {
     return this.usersRepository.find({
       where: {
         name,
+      },
+      select: this.excludeFields(['password']),
+    });
+  }
+
+  findOne(filter: Partial<User>): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        ...filter,
       },
     });
   }
@@ -23,8 +44,6 @@ export class UsersService {
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
-    // const newUser = { id: Date.now(), ...createUserDto };
-
     const newUser = this.usersRepository.create(createUserDto);
 
     return this.usersRepository.save(newUser);

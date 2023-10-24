@@ -1,23 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+class Main {
+  async bootstrap() {
+    const logger = new Logger(Main.name);
 
-  app.useGlobalPipes(new ValidationPipe());
+    const port = 3000;
 
-  const config = new DocumentBuilder()
-    .setTitle('Nest API')
-    .setDescription('the description of the API')
-    .setVersion('1.0')
-    .build();
+    const app = await NestFactory.create(AppModule);
 
-  const document = SwaggerModule.createDocument(app, config);
+    app.useGlobalPipes(new ValidationPipe());
 
-  SwaggerModule.setup('/doc', app, document);
+    const config = new DocumentBuilder()
+      .setTitle('Nest API')
+      .setDescription('the description of the API')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  await app.listen(3000);
+    const document = SwaggerModule.createDocument(app, config);
+
+    SwaggerModule.setup('/doc', app, document);
+
+    logger.log(`Listening on port ${port}`);
+    await app.listen(3000);
+  }
 }
-bootstrap();
+
+new Main().bootstrap();

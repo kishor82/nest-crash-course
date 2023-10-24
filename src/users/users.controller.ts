@@ -7,19 +7,24 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
