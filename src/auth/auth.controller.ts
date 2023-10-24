@@ -12,14 +12,23 @@ import { omit } from 'lodash';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocalAuthGuard } from './local.auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
-import { AuthenticatedGuard } from './authenticated.guard';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt.auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   //signup
   @Post('singup')
@@ -50,13 +59,16 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  login(@Request() req, @Body() _body: LoginUserDto): any {
-    return req.user; // TODO: return JWT access token
+  login(@Request() req, @Body() body: LoginUserDto): any {
+    return this.authService.login(body); // TODO: return JWT access token
   }
 
   //Authenticated user
-  @UseGuards(AuthenticatedGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get('me')
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiOperation({ summary: 'Get Authenticated user' })
   getProtected(@Request() req): string {
     return req.user; // TODO: require an Bearer token, validate token
   }
